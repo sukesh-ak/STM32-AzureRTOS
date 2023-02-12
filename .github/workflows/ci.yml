@@ -1,0 +1,36 @@
+name: Dockerize Azure RTOS simulator environment
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main", "netxduo"]
+
+env:
+  TEST_TAG: test:ci
+
+jobs:
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      -
+        name: Set up Docker BuildX
+        uses: docker/setup-buildx-action@v2
+
+      -
+        name: Build
+        uses: docker/build-push-action@v3
+        with:
+          file: ".devcontainer/Dockerfile"
+          load: true
+          tags: ${{ env.TEST_TAG }}
+
+      - name: Check out repository code
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+
+      -
+        name: Test
+        run: |
+          docker run --rm -v ${{ github.workspace }}:/workspace ${{ env.TEST_TAG }} /bin/bash -c "set -e; for d in /workspace/courses/*/Project*; do pushd \$d; cmake -Bbuild && cmake --build build -j4; popd; done"

@@ -1,0 +1,153 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Build ThreadX Project",
+            "type": "shell",
+            "linux": {
+                "command": "cd courses/threadx/${input:threadxProjectsList} && cmake -Bbuild && cmake --build build -j4",
+                "options": {
+                    "cwd": "${workspaceFolder}"
+                },
+                "problemMatcher": [
+                    "$gcc"
+                ],
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "Run ThreadX Project",
+            "type": "shell",
+            "linux": {
+                "command": "./courses/threadx/${input:threadxProjectsList}/build/${input:threadxProjectsList}",
+                "options": {
+                    "cwd": "${workspaceFolder}"
+                },
+                "problemMatcher": [
+                    "$gcc"
+                ]
+            }
+        },
+        {
+            "label": "Clean ThreadX Project",
+            "type": "shell",
+            "linux": {
+                "command": "rm -rf ./courses/threadx/${input:threadxProjectsList}/build/",
+                "options": {
+                    "cwd": "${workspaceFolder}"
+                },
+                "problemMatcher": [
+                    "$gcc"
+                ]
+            }
+        },
+        {
+            "label": "Build NetXDuo Project",
+            "type": "shell",
+            "linux": {
+                "command": "cd courses/netxduo/${input:netxduoProjectsList} && cmake -Bbuild && cmake --build build -j4",
+                "options": {
+                    "cwd": "${workspaceFolder}"
+                },
+                "problemMatcher": [
+                    "$gcc"
+                ],
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "Run NetXDuo Project",
+            "type": "shell",
+            "linux": {
+                "command": "sudo ./tools/init_network.sh>/dev/null 2>&1 && exe=./courses/netxduo/${input:netxduoProjectsList}/build/${input:netxduoProjectsList} && echo $exe && sudo setcap cap_net_raw,cap_net_admin=eip $exe && $exe",
+                "options": {
+                    "cwd": "${workspaceFolder}"
+                },
+                "problemMatcher": [
+                    "$gcc"
+                ]
+            }
+        },
+        {
+            "label": "Clean NetXDuo Project",
+            "type": "shell",
+            "linux": {
+                "command": "rm -rf ./courses/netxduo/${input:netxduoProjectsList}/build/",
+                "options": {
+                    "cwd": "${workspaceFolder}"
+                },
+                "problemMatcher": [
+                    "$gcc"
+                ]
+            }
+        },
+    ],
+    "inputs": [
+        {
+            "type": "pickString",
+            "id": "threadxProjectsList", 
+            "description": "Select the project you want to build",
+            "options": [
+                {
+                    "label": "01",
+                    "value": "ProjectHelloWorld"
+                },
+                {
+                    "label": "02",
+                    "value": "ProjectAnalyze"
+                },
+                {
+                    "label": "03",
+                    "value": "ProjectBreakSuspension"
+                },
+                {
+                    "label": "04",
+                    "value": "ProjectProducerConsumer"
+                },
+                {
+                    "label": "05",
+                    "value": "ProjectEventFlags"
+                },
+                {
+                    "label": "06",
+                    "value": "ProjectMessageQueues"
+                },
+                {
+                    "label": "07",
+                    "value": "ProjectEventChaining"
+                },
+                {
+                    "label": "08",
+                    "value": "ProjectPriorityInversion"
+                }
+            ],
+            "default": "ProjectHelloWorld"
+        },
+        {
+            "type": "pickString",
+            "id": "netxduoProjectsList", 
+            "description": "Select the project you want to build",
+            "options": [
+                {
+                    "label": "01",
+                    "value": "ProjectHelloWorld"
+                },
+                {
+                    "label": "02",
+                    "value": "ProjectUDPEchoClient"
+                },
+                {
+                    "label": "03",
+                    "value": "ProjectUDPEchoServer"
+                }
+            ],
+            "default": "ProjectHelloWorld"
+        }
+    ]
+}
